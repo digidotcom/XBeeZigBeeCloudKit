@@ -1,0 +1,52 @@
+<h1>
+    XBee Gateways in your account
+    <div class="pull-right">
+        <a class="btn btn-link"
+            ng-href="https://{{cloud_fqdn}}/home.do" target="_blank">Manage Devices</a>
+        <button class="btn btn-default" ng-click="load_devices()"
+            ng-disabled="devices.loading">
+            <i class="icon-refresh" ng-class="{'icon-spin': devices.loading}"></i> Refresh List
+        </button>
+    </div>
+</h1>
+<hr />
+
+<div class="alert alert-danger" ng-show="devices.loaded && devices.load_error">
+    {{devices.load_error}}
+</div>
+
+<div class="row" ng-show="config.error">
+    <div class="alert alert-danger">
+        An error occurred processing configuration<span ng-show="config.error_text">: <strong>{{config.error_text}}</strong></span>
+    </div>
+</div>
+
+<table class="table table-striped table-hover table-bordered text-center device-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th width="40%">Device ID</th>
+            <th width="40%">Description</th>
+            <th width="20%">XBee Network</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="device in devices.list | orderBy:'+devConnectwareId'" class="device-row">
+            <td>
+                <img ng-if="device.dpConnectionStatus == 0"
+                    src="/static/assets/device_disconnected.png" />
+                <img ng-if="device.dpConnectionStatus != 0"
+                    src="/static/assets/device_connected.png" />
+            </td>
+            <td>{{device.devConnectwareId}}</td>
+            <td>{{device.dpDescription}}</td>
+            <td>
+                <a ui-sref="xbee_network({gateway: device.devConnectwareId})" class="btn btn-default">View</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button class="btn btn-devicecloud" ng-click="add_device()">
+    <i class="icon-plus"></i> Add New Device
+</button>

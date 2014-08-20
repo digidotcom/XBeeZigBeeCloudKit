@@ -1,0 +1,5 @@
+.widget-tilt > div[tilt-indicator] {
+    position: absolute;
+    top: 0px;
+    left: 27px;
+}

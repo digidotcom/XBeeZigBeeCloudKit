@@ -1,0 +1,79 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Device IO Configuration</h3>
+        </div>
+        <div class="modal-body">
+
+            <div class="row" ng-show="state.working">
+                <div class="alert alert-info col-lg-offset-1 col-lg-10">
+                    <i class="icon-spinner icon-spin icon-2x pin-config-icon"></i>
+                    <div class="pin-config-message">
+                        Checking device configuration...
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="state.applying">
+                <div class="alert alert-info col-lg-offset-1 col-lg-10">
+                    <i class="icon-spinner icon-spin icon-2x pin-config-icon"></i>
+                    <div class="pin-config-message">
+                        Applying new configuration to device...
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-show="!state.working && !state.applying">
+                <div ng-show="!state.error" class="col-lg-offset-1 col-lg-10">
+                    <div class="alert" ng-class="all_is_well() ? 'alert-success' : 'alert-warning'">
+                        <i class="icon-2x pin-config-icon"
+                            ng-class="all_is_well() ? 'icon-ok' : 'icon-warning-sign'"></i>
+                        <div class="pin-config-message">
+                            <span>The device is<strong ng-show="!all_is_well()">&nbsp;not</strong>&nbsp;configured for this setting.</span>
+                            <ul>
+                                <li ng-if="values.fetched === undefined">
+                                    <strong>The device might not support this setting.</strong>
+                                </li>
+                                <li ng-if="values.selected == values.fetched">
+                                    {{rci_to_at_cmd(command.cmd)}} is set to {{values.selected}}.
+                                </li>
+                                <li ng-if="values.selected != values.fetched && values.fetched != undefined">
+                                    {{rci_to_at_cmd(command.cmd)}} is {{values.fetched}}, but needs to be {{values.selected}}.
+                                </li>
+                                <li ng-if="values.selected != values.fetched && values.fetched == undefined">
+                                    {{rci_to_at_cmd(command.cmd)}} needs to be {{values.selected}}.
+                                </li>
+                                <li ng-if="values.device_ic == values.computed_ic">
+                                    IC is appropriate ({{values.computed_ic}}).
+                                </li>
+                                <li ng-if="values.device_ic != values.computed_ic">
+                                    IC is {{values.device_ic}}, but needs to be {{values.computed_ic}}.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <form class="form" role="form">
+                      <div class="form-group">
+                        <label for="cmdSelect" class="control-label">Change Pin Configuration:</label>
+                        <select id="cmdSelect" class="form-control" ng-model="values.selected" ng-options="option.value as option.label for option in command.options"></select>
+                      </div>
+                    </form>
+                </div>
+                <div ng-show="state.error" class="col-lg-offset-1 col-lg-10">
+                    <div class="alert alert-danger">
+                        An error occurred processing configuration
+                        <span ng-show="state.error_text">
+                            <pre class="error" ng-if="state.error_text"
+                                ng-bind="state.error_text | prettyJson">
+                            </pre>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-show="!state.error" ng-click="configure_device(command.cmd, values.selected, values.device_ic)" class="btn btn-devicecloud" ng-disabled="state.applying || state.working">Reconfigure Device</button>
+            <button ng-click="check_config()" class="btn btn-devicecloud" ng-show="state.error">Retry</button>
+            <button class="btn btn-default" ng-click="$close()">Close</button>
+        </div>
+    </div>
+</div>

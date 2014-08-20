@@ -1,0 +1,165 @@
+<h1>Dashboard Creation</h1>
+<hr />
+
+<p>Welcome to the XBee ZigBee Cloud Kit App! To get started, we need to set up your dashboard.</p>
+
+<hr />
+
+<div>
+    <h3>Step 1: Choose a layout preset</h3>
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="inputDevice" class="col-lg-3 control-label">Layout</label>
+            <div class="col-lg-6">
+                <select id="inputDashboard" name="inputDashboard"
+                    class="form-control" ng-model="selected_layout"
+                    ng-disabled="loading_devices || loading_radios || config.checking || config.applying"
+                    ng-options="l.description for l in dashboard_layouts">
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div ng-show="selected_layout.definition.length">
+    <div>
+        <hr />
+
+        <h3>Step 2: Select your XBee Gateway</h3>
+        <div class="alert alert-danger" ng-show="load_error">
+            {{load_error}}
+        </div>
+
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="inputDevice" class="col-lg-3 control-label">XBee Gateway</label>
+                <div class="col-lg-6">
+                    <select id="inputDevice" class="form-control" ng-model="selected_device"
+                        name="inputDevice"
+                        ng-options="make_label(d) for d in devices | orderBy:'+devConnectwareId'"
+                        ng-disabled="loading_devices || loading_radios || config.checking || config.applying">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-3 col-lg-6">
+                    <button class="btn btn-devicecloud" name="addDevice"
+                        ng-click="add_device()"
+                        ng-disabled="loading_devices || loading_radios || config.checking || config.applying">
+                        <i class="icon-plus"></i> Add New Device
+                    </button>
+
+                    <button class="btn btn-default" ng-click="get_devices()"
+                        ng-disabled="loading_devices || loading_radios|| config.checking || config.applying" name="refreshList">
+                        <i class="icon-refresh" ng-class="{'icon-spin': loading_devices}"></i> Refresh List
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div ng-show="selected_device">
+        <hr />
+
+        <h3>Step 3: Select your Cloud Kit XBee</h3>
+
+        <div class="alert alert-danger" ng-show="radio_load_error">
+            {{radio_load_error}}
+        </div>
+
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="inputRadio">XBee Module</label>
+                <div class="col-lg-6">
+                    <select id="inputRadio" class="form-control" name="inputRadio"
+                        ng-model="selected_radio"
+                        ng-options="radio_label(r) for r in radios"
+                        ng-disabled="loading_radios || config.checking || config.applying">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-3 col-lg-2">
+                    <button class="btn btn-default" ng-click="get_radios()"
+                            ng-disabled="loading_radios || config.checking || config.applying" name="refreshXbees">
+                        <i class="icon-refresh" ng-class="{'icon-spin': loading_radios}"></i> Refresh List
+                    </button>
+                </div>
+                <div class="col-lg-offset-1 col-lg-3" ng-hide="loading_radios || radio_load_error">
+                    <button class="btn btn-link"
+                            ng-click="show_joining_instructions(selected_device.devConnectwareId, gateway_radio)">
+                        Don't see your XBee?
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div ng-show="selected_device && selected_radio" id="radio-config-step">
+        <hr />
+        <h3>Step 4: Configure XBee for Cloud Kit</h3>
+
+        <!-- Fetching or applying configuration -->
+        <div class="row" ng-show="config.checking || config.applying">
+            <div class="alert alert-info col-lg-offset-2 col-lg-7">
+                <i class="icon-spinner icon-spin icon-large"></i>
+                &nbsp;
+                <span ng-if="config.checking">Checking XBee module configuration...</span>
+                <span ng-if="config.applying">Applying Kit Configuration to XBee module...</span>
+            </div>
+        </div>
+
+        <!-- Configuration matches stock config -->
+        <div class="row" ng-show="config.loaded && config.stock">
+            <div class="alert alert-success col-lg-offset-2 col-lg-7">
+                <i class="icon-ok icon-large" style="display: table-cell; vertical-align: middle"></i>
+                <span style="display: table-cell; padding-left: 1em">
+                    This module is configured for the Cloud Kit.
+                </span>
+            </div>
+        </div>
+
+        <!-- Configuration does not match stock config -->
+        <div class="row" ng-show="config.loaded && !config.stock">
+            <div class="alert alert-warning col-lg-offset-2 col-lg-7">
+                <i class="icon-warning-sign icon-large" style="display: table-cell; vertical-align: middle"></i>
+                <span style="display: table-cell; padding-left: 1em">
+                    This module is <strong>not</strong> configured for the Cloud Kit. Would you like to apply the Kit Configuration?
+                </span>
+            </div>
+            <div class="col-lg-offset-3 col-lg-7">
+                <button class="btn btn-devicecloud" id="configureRadio" ng-click="configure_radio(selected_device, selected_radio)">Yes (recommended)</button>
+                <button class="btn btn-default" id="skipConfig" ng-click="config.confirmed=true">No</button>
+            </div>
+        </div>
+
+        <!-- Error loading or applying config -->
+        <div class="row" ng-show="config.error">
+            <div class="alert alert-danger col-lg-offset-2 col-lg-7">
+                An error occurred while processing configuration.
+                <pre class="error">{{ config.error | prettyJson }}</pre>
+            </div>
+            <div class="col-lg-offset-3 col-lg-7">
+                <button class="btn btn-devicecloud" ng-click="checkConfig(selected_device, selected_radio)">Retry</button>
+                <button class="btn btn-default" ng-click="config.confirmed = true">Skip</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="form-horizontal" role="form" ng-show="selected_layout.definition.length == 0 || (selected_device && selected_radio && config.confirmed)">
+    <hr />
+
+    <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+            <button class="btn btn-lg btn-devicecloud" name="createDash"
+                ng-click="create_dashboard(selected_device, selected_radio, selected_layout)"
+                ng-disabled="dashboard_working">
+                <span ng-show="dashboard_working">
+                    <i class="icon-spinner icon-spin icon-large"></i>
+                </span>
+                Create Dashboard!
+            </button>
+        </div>
+    </div>
+</form>

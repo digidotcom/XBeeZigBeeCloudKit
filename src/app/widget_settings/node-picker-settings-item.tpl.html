@@ -1,0 +1,41 @@
+<div class="form-group"
+        ng-class="{'has-error': !loading_nodes && !$parent.form.xbeenode.$valid}">
+    <label class="col-lg-3 control-label" for="xbeenode">
+        XBee Module<span class="text-danger">*</span>
+    </label>
+    <div class="col-lg-6">
+        <select class="form-control" name="xbeenode" id="xbeenode"
+            ng-disabled="!widget.device || loading_nodes"
+            ng-required="true"
+            ng-model="selected_node" ng-options="node.xpExtAddr as make_label(node) for node in available_nodes"></select>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+            ng-disabled="!widget.device || loading_nodes">
+            Discover
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <a ng-click="discover_xbees(widget.device, true)">Fetch from Device Cloud</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a ng-click="discover_xbees(widget.device, false)">Fetch from gateway (cached)</a>
+            </li>
+            <li>
+                <a tooltip="Caution: This will clear the gateway's list of XBee modules before performing a discovery." tooltip-placement="bottom"
+                    ng-click="discover_xbees(widget.device, false, true)">
+                    Fetch from gateway (clear device list)
+                </a>
+            </li>
+        </ul>
+    </div>
+    <i class="icon-spin icon-spinner icon-2x" ng-if="loading_nodes"
+        style="vertical-align: middle; margin-left: 10px"></i>
+    <i class="text-danger icon-exclamation-sign icon-2x"
+        ng-if="has_error && error_message"
+        style="vertical-align: middle; margin-left: 10px"
+        tooltip="{{error_message}}" tooltip-placement="right"></i>
+</div>
+

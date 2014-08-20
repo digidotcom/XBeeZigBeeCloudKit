@@ -1,0 +1,7 @@
+<div class="alert alert-danger" style="margin: 1em; text-align: center" ng-if="old_browser || unsupported">
+    <span ng-if="old_browser">{{ old_browser_desc }} is not supported.</span>
+    <span ng-if="unsupported">{{ unsupported_error }}</span>
+    <br />
+    If you experience problems, please
+    <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a>.
+</div>

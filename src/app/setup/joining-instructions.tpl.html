@@ -1,0 +1,173 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Joining an XBee module to your XBee Gateway</h3>
+        </div>
+        <div class="modal-body">
+            <div>
+                If your XBee doesn't appear in the XBee Module list, it might not
+                be joining your XBee Gateway's ZigBee network.
+            </div>
+            <!-- Wrap these in a div with margin-top:20, to even out the margins -->
+            <div style="margin-top: 20px">
+                <div class="alert alert-info" ng-show="cfg.loading">
+                    <i class="icon-spin icon-spinner icon-large"></i>
+                    &nbsp;&nbsp;
+                    Fetching gateway XBee module configuration...
+                </div>
+                <div class="alert alert-danger" ng-show="!cfg.loading && cfg.error">
+                    An error occurred while fetching configuration: {{ cfg.error }}
+                </div>
+            </div>
+
+            <div ng-hide="cfg.loading">
+                <!-- If configuration was loaded successfully... -->
+                <div ng-hide="cfg.error">
+                    To ensure that your XBee can join the ZigBee network formed by
+                    your gateway, use <a href="http://www.digi.com/xctu" target="_blank">XCTU</a>
+                    to set the following parameters on your XBee:
+
+                    <br /><br />
+
+                    <ul>
+                        <li>
+                        ID (Extended PAN ID):
+                        <code>{{ cfg.data.radio.ext_pan_id }}</code>
+                        </li>
+                        <li>
+                        EE (Encryption Enable):
+                        <code>{{ cfg.data.radio.encrypt_enable }}</code>
+                        </li>
+                        <li>
+                        EO (Encryption Options):
+                        <code>{{ cfg.data.radio.encrypt_options }}</code>
+                        </li>
+                    </ul>
+
+                    <div ng-if="cfg.data.radio.encrypt_enable != 0">
+                        <br />
+                        <strong>Note:</strong> Because encryption is enabled,
+                        ensure that these settings also match the gateway
+                        XBee's configuration:
+                        <ul>
+                            <li>
+                                KY (Link Encryption Key)<span ng-if="sent_cfg.link_key">: <code>{{ sent_cfg.link_key }}</code></span>
+                            </li>
+                            <li>
+                                NK (Network Encryption Key)<span ng-if="sent_cfg.network_key">: <code>{{ sent_cfg.network_key }}</code>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- If there was an error loading the configuration... -->
+                <div ng-show="cfg.error">
+                    To ensure that your XBee can join the ZigBee network formed by
+                    your gateway, use <a href="http://www.digi.com/xctu" target="_blank">XCTU</a>
+                    to set the following parameters on your XBee to match the
+                    configuration of your gateway's XBee:
+
+                    <br /><br />
+
+                    <ul>
+                        <li>ID (Extended PAN ID)</li>
+                        <li>EE (Encryption Enable)</li>
+                        <li>EO (Encryption Options)</li>
+                    </ul>
+
+                    If encryption is enabled, ensure that these settings also
+                    match the gateway XBee's configuration:
+                    <ul>
+                        <li>KY (Link Encryption Key)</li>
+                        <li>NK (Network Encryption Key)</li>
+                    </ul>
+                </div>
+
+                <br />
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="cursor: pointer"
+                        ng-click="toggleReconfig()">
+                        <i class="pull-right" ng-class="{'icon-caret-down': !show_reconf, 'icon-caret-up': show_reconf}"></i>
+                        <h3 class="panel-title">Optional: Reconfigure the gateway XBee</h3>
+                    </div>
+                    <div class="panel-body" ng-show="show_reconf">
+                        You can use the form below to change any of the
+                        network-forming parameters in the gateway XBee (the
+                        network coordinator).<br />
+                        <small>
+                            <i>
+                                Leave a field blank if its value does not need to be changed.
+                                <br>
+                                Entries will be handled as hexadecimal values.
+                            </i>
+                        </small>
+                        <hr>
+                        <div class="alert alert-danger" ng-if="reconfigure.error">
+                            An error occurred while applying configuration:
+                            {{ reconfigure.error + (error_key ? ' (' + error_key + ')' : '')}}
+                        </div>
+                        <form class="form-horizontal" name="myForm">
+                            <div class="form-group" style="margin-bottom: 10px" show-error>
+                                <label class="col-sm-5 control-label" for="ext_pan_id">Extended PAN ID:</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="text" id="ext_pan_id" ng-model="send_cfg.ext_pan_id" placeholder="{{cfg.data.radio.ext_pan_id}}" ng-pattern="key_regex" maxlength="18" ng-disabled="reconfigure.applying">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-5 col-sm-5">
+                                    <div class="checkbox" ng-class="{disabled: reconfigure.applying}">
+                                        <label>
+                                            <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="send_cfg.encrypt_enable" ng-disabled="reconfigure.applying">
+                                            EE (Encryption Enable)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" show-error>
+                                <label class="col-sm-5 control-label" for="encrypt_options">Encryption Options:</label>
+                                <div class="col-sm-2">
+                                    <input class="form-control" type="text" id="encrypt_options" ng-model="send_cfg.encrypt_options" placeholder="0x0" ui-mask="0xX" ng-disabled="send_cfg.encrypt_enable == 0 || reconfigure.applying">
+                                </div>
+                            </div>
+                            <div class="form-group" show-error>
+                                <label class="col-sm-5 control-label" for="link_key">Link Encryption Key:</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="text" id="link_key" ng-model="send_cfg.link_key" placeholder="0x0" ng-pattern="key_regex" ng-disabled="send_cfg.encrypt_enable == 0 || reconfigure.applying">
+                                </div>
+                            </div>
+                            <div class="form-group" show-error>
+                                <label class="col-sm-5 control-label" for="network_key">Network Encryption Key:</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" type="text" id="network_key" ng-model="send_cfg.network_key" placeholder="0x0" ng-pattern="key_regex" ng-disabled="send_cfg.encrypt_enable == 0 || reconfigure.applying">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-5 col-sm-5">
+                                    <button class="btn btn-devicecloud"
+                                        ng-click="send_configuration()"
+                                        ng-disabled="reconfigure.applying || !myForm.$valid">
+                                        <i class="icon-spin icon-spinner icon-small" ng-if="reconfigure.applying"></i>
+                                        Apply settings
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footnote, linking to user's guide -->
+                <div>
+                    <hr />
+                    For more detailed instructions, refer to the "Join your XBee module to your XBee Gateway" section of the
+                    <a ng-href="{{doc_link}}" target="_blank">XBee Gateway User's Guide</a>.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" name="close" ng-click="cancel()">Close</button>
+        </div>
+    </div>
+</div>
+
