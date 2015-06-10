@@ -19,7 +19,7 @@
     "lodash": "~2.0.0",
     "respond": "~1.3.0",
     "raphael": "~2.1.2",
-    "justgauge": "*",
+    "justgage": "*",
     "toastr": "~2.0.0",
     "select2": "~3.5.0"
   },

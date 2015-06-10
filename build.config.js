@@ -89,7 +89,7 @@ module.exports = {
       'vendor/restangular/dist/restangular.js',
       'vendor/raphael/raphael-min.js',
       'vendor/highlight.js/build/highlight.pack.js',
-      'vendor/justgauge/justgage.js',
+      'vendor/justgage/justgage.js',
       'vendor/select2/select2.js',
       'vendor/toastr/toastr.js'
     ].concat(
