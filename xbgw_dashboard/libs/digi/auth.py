@@ -67,7 +67,7 @@ class DeviceCloudBackend(object):
             logger.exception(e)
             return None
         except TypeError as e:
-            # Django catches this as 'this back-end does support these
+            # Django catches this as 'this back-end does not support these
             # arguments', so we must make it not see a TypeError.
             raise Exception(traceback.format_exc())
 
