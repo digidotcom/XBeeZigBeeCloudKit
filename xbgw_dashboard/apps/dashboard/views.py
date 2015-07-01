@@ -368,8 +368,13 @@ def login_user(request):
     usercloudid = username + \
         app_settings.LIB_DIGI_DEVICECLOUD['USERNAME_CLOUD_DELIMETER'] + cloud_fqdn
     if username and password and cloud_fqdn:
-        user = authenticate(username=usercloudid,
-                            password=password)
+        try:
+            user = authenticate(username=usercloudid,
+                                password=password)
+        except Exception:
+            logger.exception("Uncaught exception during authentication")
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         if user is not None:
             login(request, user)
 

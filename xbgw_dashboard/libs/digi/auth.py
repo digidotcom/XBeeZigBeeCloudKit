@@ -6,10 +6,12 @@
 # Copyright (c) 2014 Digi International Inc., All Rights Reserved.
 #
 
+import logging
+import traceback
+
 from django.contrib.auth import get_user_model
 from devicecloud import DeviceCloudConnector
 from requests.exceptions import HTTPError
-import logging
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -64,6 +66,11 @@ class DeviceCloudBackend(object):
             # We got an error trying to hit device cloud, what to do?
             logger.exception(e)
             return None
+        except TypeError as e:
+            # Django catches this as 'this back-end does support these
+            # arguments', so we must make it not see a TypeError.
+            raise Exception(traceback.format_exc())
+
         if login_valid:
             # Find and use the true device cloud username for this user
             # DC allows mixed case usernames in authentication, which can lead
