@@ -280,8 +280,13 @@ angular.module( 'XBeeGatewayApp', [
         'X': /[a-fA-F0-9]/
     }
 })
-.run( function run ($rootScope, $state, $stateParams, titleService ) {
+.run( function run ($rootScope, $state, $stateParams, titleService, $window, $location ) {
     titleService.setSuffix( ' | XBee ZigBee Cloud Kit' );
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+
+    if ($location.port() == 5859) {
+        // Integration testing. Disable select2 because it interferes.
+        $window.jQuery.fn.select2 = angular.noop;
+    }
 });

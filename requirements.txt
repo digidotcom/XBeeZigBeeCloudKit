@@ -10,9 +10,9 @@ django-jux==1.0.2
 django-log-request-id==1.0.0
 django-sslify==0.2
 djangorestframework==2.3.8
-gevent==0.13.8
-git+git://github.com/abourget/gevent-socketio.git@99f96b0b379b87a256e4f9092e513b33bbb2836d#egg=gevent_socketio-dev
-gevent-websocket==0.3.6
+gevent==1.0.2
+gevent-socketio==0.3.6
+gevent-websocket==0.9.5
 greenlet==0.4.1
 gunicorn==18.0
 mock==1.0.1
