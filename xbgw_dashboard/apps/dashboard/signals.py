@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2014 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 '''
@@ -18,6 +18,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.core.exceptions import ImproperlyConfigured
 from Crypto.Cipher import AES
 from django.conf import settings
+import binascii
 
 logger = logging.getLogger(__name__)
 
@@ -71,5 +72,9 @@ def store_password(sender, user, request, **kwargs):
         chr(random.randint(0, 0xFF)) for n in range(AES.block_size))
     cipher = AES.new(secret, AES.MODE_CFB, init_vector)
 
-    request.session['password_encrypted'] = cipher.encrypt(password)
-    request.session['encryption_iv'] = init_vector
+    enc_password = cipher.encrypt(password)
+
+    # These values are stored as hex strings, instead of byte arrays, so that
+    # we can encode the session using the JSONSerializer.
+    request.session['password_encrypted'] = binascii.b2a_hex(enc_password)
+    request.session['encryption_iv'] = binascii.b2a_hex(init_vector)

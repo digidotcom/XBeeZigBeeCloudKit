@@ -1,10 +1,9 @@
 {
   "author": "Digi International",
   "name": "xbee-zigbee-cloud-kit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies": {
     "prompt": "~0.2.11",
-    "connect": "*",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
     "grunt-recess": "~0.3.0",
@@ -22,8 +21,6 @@
     "grunt-conventional-changelog": "~0.1.1",
     "grunt-bump": "0.0.6",
     "bower": "*",
-    "express": "~3.3.4",
-    "socket.io": "~0.9.16",
     "request": "~2.26.0",
     "karma": "~0.10.0",
     "phantomjs": "~1.9.7-8"
@@ -33,11 +30,9 @@
   },
   "engines": {
     "node": "0.10.x",
-    "npm": "1.2.x"
+    "npm": "2.13.x"
   },
   "devDependencies": {
-    "socket.io": "~0.9.16",
-    "express": "~3.3.4",
     "request": "~2.26.0",
     "karma-junit-reporter": "~0.1.0",
     "karma-coverage": "~0.2"

@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2014 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 from hamcrest import assert_that, ends_with, starts_with, is_, is_not
@@ -20,9 +20,9 @@ BAD_CREDS_TEXT = "Username or password was incorrect."
 NEW_DEVICE_MODAL_TITLE = "Add a New Gateway to your Account"
 
 STEP_TITLES = [
-    None, "Step 1: Choose a layout preset",
-    "Step 2: Select your XBee Gateway", "Step 3: Select your Cloud Kit XBee",
-    "Step 4: Configure XBee for Cloud Kit"
+    None, "1: Choose a layout preset",
+    "2: Select your XBee Gateway", "3: Select your Cloud Kit XBee",
+    "4: Configure XBee for Cloud Kit"
 ]
 
 

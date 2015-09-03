@@ -16,7 +16,7 @@ module.exports = {
   /**
    * app_version stores the 4-tuple version number for the application.
    */
-  app_version: '1.0.0.0',
+  app_version: '1.1.0.0',
 
   /**
    * The `build_dir` folder is where our projects are compiled during

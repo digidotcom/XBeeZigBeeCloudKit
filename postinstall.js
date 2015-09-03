@@ -39,10 +39,10 @@ function spawn_command(cmd, args) {
 console.log("Running bower install" + (is_windows ? " ON WINDOWS" : ""));
 bower_child = spawn_command(bower_path, ["install"]);
 bower_child.stdout.on("data", function (data) {
-    console.log("<stdout> " + data);
+    console._stdout.write(data.toString());
 });
 bower_child.stderr.on("data", function (data) {
-    console.log("<stderr> " + data);
+    console._stderr.write(data.toString());
 });
 bower_child.on("exit", function (code, signal) {
     if (code) {
@@ -54,10 +54,10 @@ bower_child.on("exit", function (code, signal) {
         console.log("Running grunt heroku:production" + (is_windows ? " ON WINDOWS" : ""));
         grunt_child = spawn_command(grunt_path, ["heroku:production"]);
         grunt_child.stdout.on("data", function (data) {
-            console.log("<stdout> " + data);
+            console._stdout.write(data.toString());
         });
         grunt_child.stderr.on("data", function (data) {
-            console.log("<stderr> " + data);
+            console._stderr.write(data.toString());
         });
         grunt_child.on("exit", function (code, signal) {
             if (code) {

@@ -13,6 +13,9 @@ application for the XBee ZigBee Cloud Kit. This source has been contributed by
     Heroku, and customize it to your needs, including creating new types of
     widgets and extending the application's functionality.
 
+See the [changelog](./CHANGELOG.md) for a summary of changes made in each
+release.
+
 [Digi]: http://www.digi.com
 
 
@@ -267,23 +270,10 @@ Run `grunt build` to gather all the necessary files into the build/ directory
 and run unit tests. Run `grunt build-notest` to gather the files without running
 unit tests.
 
-Finally, start the mock back-end server with
-
-    $ node server.js build <heroku_app_name>
-
-and open your browser to `http://localhost:3000`. This server allows the
-front-end application to run on your local machine without running into
-cross-site scripting errors. The server simply pipes requests and responses to
-and from the RESTful API of the your Heroku instance. The command
-
-    $ PORT=9000 node server.js build <heroku_app_name>
-
- will run the local server at a different port, if this is necessary or desired.
-
-
-**Note:** You may choose to run the Django back-end server locally, rather than
-use the mock Node server to forward requests to a Heroku instance. See "Setup to
-run app locally" above for more information on how to do so.
+Finally, run the Django back-end server locally and open the application in a
+web browser. If the server is already running locally, just force a refresh of
+the application. See the "Setup to run app locally" section above for more
+information on how to run the back-end server.
 
 
 ## Application structure

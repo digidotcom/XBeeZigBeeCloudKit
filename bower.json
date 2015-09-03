@@ -1,6 +1,6 @@
 {
   "name": "XBeeGatewayApp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "devDependencies": {
     "angular": "#v1.2.0-rc.2",
     "angular-mocks": "#v1.2.0-rc.2",
@@ -21,7 +21,7 @@
     "raphael": "~2.1.2",
     "justgage": "*",
     "toastr": "~2.0.0",
-    "select2": "~3.5.0"
+    "select2": "#3.5.1"
   },
   "dependencies": {},
   "resolutions": {

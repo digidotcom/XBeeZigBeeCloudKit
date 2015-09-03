@@ -1,4 +1,4 @@
-Django==1.5.4
+Django==1.5.12
 Markdown==2.3.1
 coverage==3.6
 dj-database-url==0.2.2
@@ -9,7 +9,7 @@ django-jux==1.0.2
 # Used for verbose logging
 django-log-request-id==1.0.0
 django-sslify==0.2
-djangorestframework==2.3.8
+djangorestframework==2.3.14
 gevent==1.0.2
 gevent-socketio==0.3.6
 gevent-websocket==0.9.5

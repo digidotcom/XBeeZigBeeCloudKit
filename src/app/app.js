@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright (c) 2014 Digi International Inc., All Rights Reserved.
+ * Copyright (c) 2015 Digi International Inc., All Rights Reserved.
  */
 
 angular.module( 'XBeeGatewayApp', [
@@ -249,6 +249,10 @@ angular.module( 'XBeeGatewayApp', [
     }]);
 
     $httpProvider.responseInterceptors.push('errorInterceptor');
+
+    // Allow the app to work with CSRF enabled on the server.
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 })
 .controller('NavbarController', function ($scope, dashboardApi, CommonLinks) {
     $scope.username = "";

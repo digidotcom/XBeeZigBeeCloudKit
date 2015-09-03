@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2014 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 '''
@@ -18,6 +18,7 @@ from rest_framework import HTTP_HEADER_ENCODING
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from Crypto.Cipher import AES
+import binascii
 
 logger = logging.getLogger(__name__)
 
@@ -34,9 +35,16 @@ def get_password_for_session(request):
         raise ImproperlyConfigured('Crypto Key Env Var is missing!')
 
     try:
+        # IV and password are stored as hex strings, and need to be turned into
+        # byte arrays. These values are stored as hex strings so that we can
+        # use the JSONSerializer for sessions.
+        encryption_iv = binascii.a2b_hex(request.session.get('encryption_iv'))
+        enc_password = binascii.a2b_hex(
+                request.session.get('password_encrypted'))
+
         cipher = AES.new(secret, AES.MODE_CFB,
-                         request.session.get('encryption_iv'))
-        password = cipher.decrypt(request.session.get('password_encrypted'))
+                         encryption_iv)
+        password = cipher.decrypt(enc_password)
     except (TypeError, KeyError):
         logger.error(
             'Attempted to retrieve password for session with missing info')

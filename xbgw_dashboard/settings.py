@@ -3,7 +3,7 @@
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
 # obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2014 Digi International Inc., All Rights Reserved.
+# Copyright (c) 2015 Digi International Inc., All Rights Reserved.
 #
 
 import os
@@ -153,7 +153,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'xbgw_dashboard.apps.dashboard.middleware.DisableCSRF',
     'xbgw_dashboard.apps.dashboard.middleware.NoCacheApiMiddleware'
 )
 
@@ -404,3 +403,7 @@ JUXD_FILENAME = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         'test-reports'),
     'backend.xml')
+
+# Django 1.5.3 introduced JSONSerializer, as it does not suffer the code
+# execution vulnerability that Pickle does.
+SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
