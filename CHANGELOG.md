@@ -13,8 +13,8 @@
   [cedar-14][cedar-14] stack. Version 1.1 includes updated Python dependencies
   which are compatible with cedar-14.
 - The initial 1.0 release of the application was missing the `vendor/`
-  subdirectory, which contained some third-party needed for the app to function
-  properly. This directory has been properly checked in now.
+  subdirectory, which contained some third-party dependencies needed for the
+  app to function properly. This directory has been properly checked in now.
 
 
 [cedar-14]: https://devcenter.heroku.com/articles/cedar-14-migration
