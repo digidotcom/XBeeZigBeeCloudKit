@@ -105,7 +105,7 @@ def get_general_page_links():
     yield "Digi International Inc.", "https://www.digi.com/"
     yield "Contact us", "http://www.digi.com/contactus/"
     yield "Privacy policy", "https://www.digi.com/legal/privacy"
-    yield "Terms & conditions", "https://www.digi.com/legal/index"
+    yield "Terms & conditions", "https://www.digi.com/legal/"
 
 
 def do_check_link(link_text, expected_href):

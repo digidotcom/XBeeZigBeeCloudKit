@@ -1,3 +1,18 @@
+<a name="xbeezigbee-1.2"></a>
+# 1.2.1.0 - pushed July 2017
+
+## Changes
+
+- Remove references to Etherios
+- Add websocket connection status to dropdown menu
+- Various bugfixes
+- Update code and documentation for newer Heroku infrastructure
+
+## Notes
+
+This version of code has not been tested - use at your own discretion.
+
+
 <a name="xbeezigbee-1.1"></a>
 # 1.1.0.0 - released September 2015
 

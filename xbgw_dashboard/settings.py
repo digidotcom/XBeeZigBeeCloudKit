@@ -329,7 +329,7 @@ LIB_DIGI_DEVICECLOUD = {
     # Use '#' as delimeter to parse username/cloud combo strings
     'USERNAME_CLOUD_DELIMETER': '#',
     # Set a default cloud fdqn if not provided
-    'DEFAULT_CLOUD_SERVER': 'login.etherios.com',
+    'DEFAULT_CLOUD_SERVER': 'my.devicecloud.com',
 }
 
 # Custom authentication backend for Device Cloud

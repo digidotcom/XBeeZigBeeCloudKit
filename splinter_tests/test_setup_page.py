@@ -99,9 +99,9 @@ log_back_in_before = with_setup(re_login)
 log_in_nodevices_before = with_setup(re_login_no_devices)
 clear_dashboards_before = with_setup(lambda: clear_dashboards)
 clear_dashboards_nodevices_before = with_setup(
-    lambda: clear_dashboards("e2e_user_nodevices", fqdn="login.etherios.com"))
+    lambda: clear_dashboards("e2e_user_nodevices", fqdn="my.devicecloud.com"))
 clear_dashboards_test_before = with_setup(
-    lambda: clear_dashboards("test_user", fqdn="login.etherios.com"))
+    lambda: clear_dashboards("test_user", fqdn="my.devicecloud.com"))
 #clear_dashboards = with_setup(clear_dashboards)
 
 

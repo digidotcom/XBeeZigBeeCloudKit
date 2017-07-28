@@ -254,9 +254,9 @@ angular.module( 'XBeeGatewayApp', [
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 })
-.controller('NavbarController', function ($scope, dashboardApi, CommonLinks) {
+.controller('NavbarController', function ($scope, dashboardApi, CommonLinks, socket) {
     $scope.username = "";
-    $scope.cloud_fqdn = "https://login.etherios.com";
+    $scope.cloud_fqdn = "https://my.devicecloud.com";
     dashboardApi.user().then(function (user) {
         if (user ===  null || user === undefined) {
             $scope.username = "<unknown>";
@@ -267,6 +267,29 @@ angular.module( 'XBeeGatewayApp', [
     });
 
     $scope.links = CommonLinks;
+
+    // Socket connection related functionality.
+    $scope.socket = socket;
+    $scope.reconnect = function (event) {
+        event.preventDefault();  // Don't actually process the link click
+
+        if ($scope.socket.state.connected) {
+            // Already connected, ignore this call.
+            return;
+        }
+
+        $scope.socket.reconnect();
+    };
+
+    /*
+     * NOTE: We will prevent the exclamation mark from flashing at startup by
+     * relying on socket.state.known, which is `false` until any of the
+     * following events come in:
+     *  - connect
+     *  - disconnect
+     *  - reconnecting
+     * at which point it is set to `true`.
+     */
 })
 .controller('NavbarLinksController', function ($scope, CommonLinks) {
     $scope.links = CommonLinks;

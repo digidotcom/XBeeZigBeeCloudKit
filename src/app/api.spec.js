@@ -31,7 +31,7 @@ describe("Service: dashboardApi", function() {
         var valid = {
             username: "test",
             password: "test!",
-            cloud_fqdn: "login.etherios.com"
+            cloud_fqdn: "my.devicecloud.com"
         };
         var parsedData = JSON.parse(data);
         if (_.where([parsedData], valid).length > 0) {
@@ -137,7 +137,7 @@ describe("Service: dashboardApi", function() {
     it("should respond with 200 on good creds", function() {
         ready(backend);
         backend.expect("POST", '/api/login');
-        api.login("test", "test!", "login.etherios.com", true);
+        api.login("test", "test!", "my.devicecloud.com", true);
         backend.flush();
     });
 
@@ -146,7 +146,7 @@ describe("Service: dashboardApi", function() {
         var successCB = jasmine.createSpy("success callback (g)");
         var failureCB = jasmine.createSpy("failure callback (g)");
         backend.expect("POST", '/api/login');
-        var promise = api.login("test", "test!", "login.etherios.com", false);
+        var promise = api.login("test", "test!", "my.devicecloud.com", false);
         promise.then(successCB, failureCB);
         backend.flush();
         expect(successCB).toHaveBeenCalled();

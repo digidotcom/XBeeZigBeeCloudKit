@@ -12,7 +12,7 @@ describe("Controller: NavbarController", function () {
     // Load module
     beforeEach(module("XBeeGatewayApp"));
 
-    var scope, ctrl, q, apiMock;
+    var scope, ctrl, q, apiMock, socketMock;
 
     beforeEach(inject(function ($rootScope, $controller, $q) {
         scope = $rootScope.$new();
@@ -24,15 +24,26 @@ describe("Controller: NavbarController", function () {
                 return deferred.promise;
             }
         };
+
+        socketMock = jasmine.createSpyObj('socket', ["on", "reconnect"]);
+        socketMock.state = {
+            connected: true,
+            connecting: false
+        };
+
         spyOn(apiMock, 'user').andCallThrough();
         ctrl = $controller("NavbarController", {
-            $scope: scope, dashboardApi: apiMock
+            $scope: scope, dashboardApi: apiMock,
+            socket: socketMock
         });
     }));
 
     it("should start with appropriate starting values", function () {
         expect(scope.username).toBe("");
-        expect(scope.cloud_fqdn).toBe("https://login.etherios.com");
+        expect(scope.cloud_fqdn).toBe("https://my.devicecloud.com");
+
+        // We store a reference to the socket service on the scope.
+        expect(scope.socket).toBe(socketMock);
     });
 
     it("should call dashboardApi.user on initialization", function () {
@@ -69,8 +80,28 @@ describe("Controller: NavbarController", function () {
 
         expect(scope.username).toBe("<unknown>");
         // cloud_fqdn is not updated in the then() callback
-        expect(scope.cloud_fqdn).toBe("https://login.etherios.com");
+        expect(scope.cloud_fqdn).toBe("https://my.devicecloud.com");
     }));
+
+    it("should call the socket service's reconnect method on reconnect()", function () {
+        // But only if the socket is not already connected.
+        socketMock.state.connected = false;
+        var event = jasmine.createSpyObj("event", ["preventDefault"]);
+
+        scope.reconnect(event);
+
+        expect(event.preventDefault).toHaveBeenCalledWith();
+        expect(socketMock.reconnect).toHaveBeenCalledWith();
+    });
+
+    it("should not call the socket service's reconnect method on reconnect() if already connected", function () {
+        var event = jasmine.createSpyObj("event", ["preventDefault"]);
+
+        scope.reconnect(event);
+
+        expect(event.preventDefault).toHaveBeenCalledWith();
+        expect(socketMock.reconnect).not.toHaveBeenCalled();
+    });
 });
 
 describe("Response handler: handle429", function () {

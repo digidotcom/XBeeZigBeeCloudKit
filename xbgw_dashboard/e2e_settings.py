@@ -111,17 +111,17 @@ user3_xbees = [
 
 e2e_users = [
     # User who already has some devices in their account.
-    # (FQDN is e2e_fqdn as opposed to login.etherios.com, etc. This allows
+    # (FQDN is e2e_fqdn as opposed to my.devicecloud.com, etc. This allows
     # us to test logging in on 'custom' server URLS, by navigating to
     # #/login/<FQDN>)
     E2EUser("e2e_user", "e2e_password", "e2e_fqdn", user1_devices),
     # User with no devices in their account
-    E2EUser("e2e_user_nodevices", "e2e_password", "login.etherios.com",
+    E2EUser("e2e_user_nodevices", "e2e_password", "my.devicecloud.com",
             user2_devices),
     # User with just one device in their account
-    E2EUser("test_user", "e2e_password", "login.etherios.com",
+    E2EUser("test_user", "e2e_password", "my.devicecloud.com",
             devices=user3_devices, xbees=user3_xbees),
     # User with only one device
-    E2EUser("e2e_user_1device", "e2e_password", "login.etherios.com",
+    E2EUser("e2e_user_1device", "e2e_password", "my.devicecloud.com",
             devices=user4_devices)
 ]

@@ -204,13 +204,15 @@ account][heroku] and the [Heroku command line toolbelt][heroku_dev].
 
         $ heroku create
 
-1.  Configure the new app to use multi-buildpacks (NodeJS & python in our case):
+1.  Configure the new app to use multiple buildpacks (PGBouncer, NodeJS & python in our case):
 
-        $ heroku config:add BUILDPACK_URL=https://github.com/ddollar/heroku-buildpack-multi.git
+        $ heroku buildpacks:add hhttps://github.com/heroku/heroku-buildpack-pgbouncer.git
+        $ heroku buildpacks:add heroku/nodejs
+        $ heroku buildpacks:add heroku/python
 
 1.  Add the "Heroku Postgres" addon to your app:
 
-        $ heroku addons:add heroku-postgresql
+        $ heroku addons:create heroku-postgresql
 
 1.  Deploy the application code to Heroku:
 
@@ -564,8 +566,8 @@ dashboards, user authentication and session handling, and a channel for new
 data from Device Cloud to travel through down to the frontend client over a
 WebSocket connection.
 
-[dc]: http://www.etherios.com/products/devicecloud/
-[dcsupport]: http://www.etherios.com/products/devicecloud/support/
+[dc]: http://www.digi.com/products/cloud/digi-device-cloud
+[dcsupport]: http://www.digi.com/products/cloud/digi-device-cloud#resources
 
 ## Getting started on Heroku
 

@@ -120,74 +120,13 @@ def test_login_good_credentials():
 
 
 @logout_before
-def test_switch_to_eu():
-    """
-    When the user clicks 'Europe Cloud', they end up on the page that
-    will have them log in against the EU Cloud.
-    """
-    browser = splinter_tests.browser
-    assert_that(browser.url, ends_with("#/login"))
-
-    browser.find_link_by_text("Europe Cloud").click()
-
-    assert_that(browser.url, ends_with("#/login/login.etherios.co.uk"))
-
-    # This 'span' element only appears when the user has selected a server
-    # other than the US.
-    login_url_span_selector = "h1.title > span.text-muted"
-
-    # Check that it is on the page.
-    assert browser.is_element_present_by_css(login_url_span_selector)
-    # Check its text
-    login_url_span = browser.find_by_css(login_url_span_selector)
-
-    span_text = login_url_span.first.text
-    assert_that(span_text, is_( "(login.etherios.co.uk)" ))
-
-
-@logout_before
-def test_eu_page_forgot_link():
-    """The 'Forgot your...' link on EU Cloud login page points to EU DC."""
-    browser = splinter_tests.browser
-    browser.find_link_by_text("Europe Cloud").click()
-
-    dc_forgot = "https://login.etherios.co.uk/forgot_password.do"
-    forgot = browser.find_by_css(".forgot-link")
-
-    assert_that(forgot.first['href'], is_(dc_forgot))
-
-
-@logout_before
-def test_switch_to_eu_then_back():
-    """
-    When the user clicks 'Europe Cloud', they end up on the page that
-    will have them log in against the EU Cloud. Then, if they click on 'US
-    Cloud', they end up back on #/login
-    """
-    browser = splinter_tests.browser
-    assert_that(browser.url, ends_with("#/login"))
-
-    browser.find_link_by_text("Europe Cloud").click()
-
-    assert_that(browser.url, ends_with("#/login/login.etherios.co.uk"))
-
-    browser.find_link_by_text("US Cloud").click()
-
-    assert_that(browser.url, ends_with("#/login"))
-
-    # Check that the grayed-out text indicating the login server URL is not
-    # present.
-    assert browser.is_element_not_present_by_css("h1.title > span.text-muted")
-
-
-@logout_before
 def test_forgot_link():
     """
     The 'Forgot your User Name or Password?' link points to DC.
     """
     browser = splinter_tests.browser
 
-    dc_forgot = "https://login.etherios.com/forgot_password.do"
+    dc_forgot = "https://my.devicecloud.com/forgot_password.do"
     link = browser.find_by_css(".forgot-link")
     assert not link.is_empty()
 
@@ -196,9 +135,9 @@ def test_forgot_link():
 
 @logout_before
 def test_signup_link():
-    """The 'Sign up' link should point to myaccount.etherios.com"""
+    """The 'Sign up' link should point to myacct.digi.com"""
     link = splinter_tests.browser.find_link_by_text("Sign up")
 
     assert not link.is_empty()
 
-    assert_that(link.first['href'], is_("https://myaccount.etherios.com/"))
+    assert_that(link.first['href'], is_("https://myacct.digi.com/"))

@@ -28,9 +28,9 @@ def teardown():
 
 def clean_slate():
     # Delete all the dashboards
-    delete_all_dashboards("test_user", "e2e_password", "login.etherios.com")
+    delete_all_dashboards("test_user", "e2e_password", "my.devicecloud.com")
     # Log back in
-    log_in_clean("test_user", "e2e_password", "login.etherios.com")
+    log_in_clean("test_user", "e2e_password", "my.devicecloud.com")
 
     # With no dashboards, logging in should lead to the dashboard setup page.
     assert_that(browser.url, ends_with("#/setup"))
@@ -41,7 +41,7 @@ def make_dashboard():
     req = requests.post(splinter_tests.SERVER_URL + '/api/dashboards',
                         data='{"widgets": []}',
                         headers={'content-type': 'application/json'},
-                        auth=('test_user#login.etherios.com', 'e2e_password'))
+                        auth=('test_user#my.devicecloud.com', 'e2e_password'))
     req.raise_for_status()
 
     # Pause for a moment.

@@ -2,13 +2,23 @@
     <a ng-href="{{ links.documentation }}" target="_blank">Documentation</a>
 </li>
 <li class="dropdown">
-    <a class="dropdown-toggle" href="#"><b>{{username}}</b> <b class="caret"></b></a>
+    <a class="dropdown-toggle" ng-class="{'text-danger': socket.state.known && !socket.state.connected}" href="#">
+        <i class="icon-exclamation-sign ng-hide" ng-show="socket.state.known && !socket.state.connected"></i>
+        <b>{{username}}</b> <b class="caret"></b>
+    </a>
     <ul class="dropdown-menu">
         <li><a ui-sref="devices">Devices</a></li>
         <li><a ui-sref="advanced">Advanced Options</a></li>
         <li class="divider"></li>
         <li><a ng-href="{{cloud_fqdn}}/home.do" target="_blank">Manage Account</a></li>
         <li class="divider"></li>
+        <li ng-class="{disabled: socket.state.connected}">
+            <a href="#/stub" ng-click="reconnect($event)">
+                {{socket.state.connected ? 'Connected' :
+                    (socket.state.connecting ? 'Reconnecting' : 'Click to reconnect')}}
+                <i class="icon-spinner icon-spin" ng-show="socket.state.connecting"></i>
+            </a>
+        </li>
         <li><a href="/logout">Log out</a></li>
     </ul>
 </li>

@@ -40,7 +40,7 @@ def teardown():
 
 def clean_slate():
     # Delete all this user's dashboards
-    delete_all_dashboards("test_user", "e2e_password", "login.etherios.com")
+    delete_all_dashboards("test_user", "e2e_password", "my.devicecloud.com")
     # Log back in
     log_in_clean("test_user", "e2e_password")
 
@@ -54,7 +54,7 @@ def make_dashboard():
     req = requests.post(splinter_tests.SERVER_URL + '/api/dashboards',
                         data='{"widgets": []}',
                         headers={'content-type': 'application/json'},
-                        auth=('test_user#login.etherios.com', 'e2e_password'))
+                        auth=('test_user#my.devicecloud.com', 'e2e_password'))
     req.raise_for_status()
 
     # Pause for a moment.
@@ -125,7 +125,7 @@ def test_links_correct():
     yield do_check_link("Devices", splinter_tests.SERVER_URL + "/#/devices")
     yield do_check_link("Advanced Options",
                         splinter_tests.SERVER_URL + "/#/advanced")
-    yield do_check_link("Manage Account", "https://login.etherios.com/home.do")
+    yield do_check_link("Manage Account", "https://my.devicecloud.com/home.do")
 
     # Verify all the other links that should be on this page.
     for linktext, url in get_general_page_links():
@@ -158,7 +158,7 @@ def test_add_widget_simple():
     yield do_check_link("Devices", splinter_tests.SERVER_URL + "/#/devices")
     yield do_check_link("Advanced Options",
                         splinter_tests.SERVER_URL + "/#/advanced")
-    yield do_check_link("Manage Account", "https://login.etherios.com/home.do")
+    yield do_check_link("Manage Account", "https://my.devicecloud.com/home.do")
 
     # 'Cancel' should bring us back to the dashboard
     yield click_cancel

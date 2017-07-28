@@ -49,6 +49,16 @@ def _put_local_phantomjs_on_path():
     else:
         print "Could not find PhantomJS installation at", phantomjs
 
+        # Newer versions of NPM are smart enough to flatten the node_modules
+        # directory.
+        dirs = ["phantomjs", "lib", "phantom", "bin"]
+        phantomjs = os.path.join(node_modules, *dirs)
+        if os.path.isdir(phantomjs):
+            curpath = os.environ["PATH"]
+            os.environ["PATH"] = os.pathsep.join([phantomjs, curpath])
+        else:
+            print "Also couldn't find it at", phantomjs
+
 
 # Nose test package setup
 def setup_package():

@@ -58,7 +58,7 @@ def socket_test(request):
 @permission_classes(())
 def monitor_receiver(request):
     """
-    Push Monitor endpoint - Recieves data from Device Cloud
+    Push Monitor endpoint - Receives data from Device Cloud
     """
     # Because we have no permission class, any authenticated user can access
     # this view.
@@ -71,17 +71,24 @@ def monitor_receiver(request):
             or request.user.password != secret_pass):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    logger.info('Recieved Device Cloud Push')
+    logger.info('Received Device Cloud Push')
 
     # Iterate through payload, sending messages keyed off topic
     try:
-        messages = request.DATA['Document']['Msg']
+        document = request.DATA.get('Document', "")
+        if not document:
+            # As of Device Cloud 2.16, push monitors send empty documents as
+            # keep-alives. We'll do nothing in these cases.
+            logger.debug("Empty push message (keepalive) handled")
+            return Response()
+
+        messages = document['Msg']
     except KeyError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     # Msg may be a list or object, depending on if multiple events.
     # Handle single case by making list of len 1
-    if type(messages) is not list:
+    if not isinstance(messages, list):
         messages = [messages]
 
     monitor_has_listeners = False
@@ -337,7 +344,7 @@ def login_user(request):
     * `username` - device cloud username
     * `password` - device cloud password
     * `cloud_fqdn` - cloud server fully qualified domain name (ex
-                        _login.etherios.com_)
+                        _my.devicecloud.com_)
 
     The following fields are optional:
 

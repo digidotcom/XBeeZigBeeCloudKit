@@ -73,7 +73,7 @@ angular.module('XBeeGatewayApp.devices', [
 
     $scope.load_devices();
 
-    $scope.cloud_fqdn = "login.etherios.com";
+    $scope.cloud_fqdn = "my.devicecloud.com";
     dashboardApi.user().then(function (user) {
         $scope.cloud_fqdn = user.cloud_fqdn;
     }, function (resp) {

@@ -44,7 +44,7 @@ def log_in(*auth):
 log_in_before = with_setup(lambda: log_in("e2e_user", "e2e_password",
                                           "e2e_fqdn"))
 log_in_test_before = with_setup(lambda: log_in("test_user", "e2e_password",
-                                               "login.etherios.com"))
+                                               "my.devicecloud.com"))
 
 
 def is_error_message_present(key, message):

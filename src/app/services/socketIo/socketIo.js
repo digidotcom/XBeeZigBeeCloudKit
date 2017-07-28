@@ -32,20 +32,36 @@ angular.module('XBeeGatewayApp')
                 on: angular.noop,
                 emit: angular.noop,
                 addListener: angular.noop,
-                removeListener: angular.noop
+                removeListener: angular.noop,
+                reconnect: angular.noop,
+
+                state: {
+                    connected: true,
+                    connecting: false,
+                    known: true
+                }
             };
         }
 
-        var socket = io.connect('/device', {'transports': ['xhr-polling']});
+        var socketOptions = {
+            transports: ['xhr-polling'],
+            // reconnect: true
+        };
+        var socket = io.connect('/device', socketOptions);
+
+        var _state = {
+            connected: false,
+            connecting: true,
+            // By default we don't "know" the connection state. (Well, we do,
+            // but let's ignore that fact.) Once we get certain events
+            // (connect, disconnect, etc.) we then _do_ know.
+            known: false
+        };
 
         window.onbeforeunload = function () {
             $log.log("Disconnecting socket.io");
             socket.disconnect();
-        }
-
-        socket.on('connect', function () {
-            $log.log("Connected via socket.io!");
-        })
+        };
 
         var asyncAngularify = function (callback) {
             return function () {
@@ -59,6 +75,26 @@ angular.module('XBeeGatewayApp')
         var addListener = function (eventName, callback) {
             socket.on(eventName, asyncAngularify(callback));
         };
+
+        addListener('connect', function () {
+            $log.log("Connected via socket.io!");
+            _state.connected = true;
+            _state.connecting = false;
+            _state.known = true;
+        });
+        addListener('disconnect', function () {
+            $log.log("Disconnected from socket.io");
+            _state.connected = false;
+            _state.connecting = false;
+            _state.known = true;
+        });
+        addListener('reconnecting', function (nextDelay, attempts) {
+            $log.log("Reconnecting socket.io: %s attempts, next delay %s ms",
+                     attempts, nextDelay);
+            _state.connected = false;
+            _state.connecting = true;
+            _state.known = true;
+        });
 
         var wrappedSocket = {
             on: addListener,
@@ -75,7 +111,13 @@ angular.module('XBeeGatewayApp')
             removeListener: function () {
                 var args = arguments;
                 return socket.removeListener.apply(socket, args);
-            }
+            },
+
+            reconnect: function () {
+                socket.socket.reconnect();
+            },
+
+            state: _state
         };
 
         return wrappedSocket;
